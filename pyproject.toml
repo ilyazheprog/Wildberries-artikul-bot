@@ -1,0 +1,76 @@
+[project]
+name = "wb"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "ilyazheprog", email = "ilya_zhenetskij@vk.com"},
+]
+dependencies = []
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[dependency-groups]
+main = [
+    "aiogram>=3.17.0",
+    "aiohttp>=3.11.11",
+    "alembic>=1.14.0",
+    "requests>=2.32.3",
+    "environs>=14.1.0",
+    "sqlalchemy[asyncio]>=2.0.37",
+    "asyncpg>=0.30.0",
+    "psycopg[binary]>=3.2.4",
+    "httpx>=0.28.1",
+]
+dev = [
+    "black>=24.10.0",
+    "isort>=5.13.2",
+]
+back = [
+    "fastapi>=0.115.6",
+    "uvicorn>=0.34.0",
+    "environs>=14.1.0",
+    "pydantic>=2.10.5",
+    "sqlalchemy[asyncio]>=2.0.37",
+    "asyncpg>=0.30.0",
+    "psycopg[binary]>=3.2.4",
+    "alembic>=1.14.0",
+    "apscheduler>=3.11.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+known_third_party = ["aiogram"]
+known_first_party = ["back", "bot", "modules"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+combine_as_imports = true
+line_length = 88
+force_sort_within_sections = true  # Упорядочивает импорты внутри каждой секции
+
+
+[tool.pdm]
+distribution = false
+
+
+[tool.pdm.scripts]
+i = "pdm install {args} -G main"
+i-dev = "pdm install --dev -G dev {args}"
+i-back = "pdm install --dev -G back {args}"
+rm-dev = "pdm remove {args} -G dev"
+rm = "pdm remove {args} -G main"
+add-dev = "pdm add {args} --dev -G dev"
+add-main = "pdm add {args} --dev -G main"
+add-back = "pdm add {args} --dev -G back"
+start = "python bot/main.py"
+start-back = "pdm run python back/main.py"
+alembic-migration = "pdm run alembic revision --autogenerate -m {args}"
+alembic-upgrade = "pdm run alembic upgrade head"
+alembic-downgrade = "pdm run alembic downgrade -1"
+db-clear = "pdm run python -m modules.database.management.db_clear"
+isort = "pdm run python -m isort app/  --skip __init__.py --filter-files"
+black = "pdm run python -m black app/"

@@ -1,0 +1,6 @@
+.env
+.pdm-python
+.venv
+.vscode
+.idea
+__pycache__

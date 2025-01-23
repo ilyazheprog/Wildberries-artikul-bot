@@ -1,0 +1,28 @@
+version: "3.3"
+services:
+  back:
+    build:
+      context: .
+    working_dir: /home/python_user/app/back
+    env_file: ../../.env
+    restart: always
+    command: bash -c "pdm config venv.in_project False && pdm i-back && pdm alembic-upgrade && TZ="Europe/Moscow" pdm start-back"
+    ports:
+      - ${BACKEND_PORT}:8000
+    tty: true
+    volumes:
+      - ./:/home/python_user/app/back
+      - ../modules/:/home/python_user/app/modules
+      - venvs:/home/python_user/.local/share/pdm/venvs
+      - ../../pyproject.toml:/home/python_user/app/pyproject.toml
+      - ../../pdm.lock:/home/python_user/app/pdm.lock
+      - ../../alembic.ini:/home/python_user/app/alembic.ini
+    networks:
+      - net
+
+volumes:
+  venvs:
+
+networks:
+  net:
+    driver: bridge

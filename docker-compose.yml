@@ -1,0 +1,40 @@
+version: "3.3"
+services:
+  bot:
+    extends:
+      file: ./app/bot/docker-compose.yml
+      service: bot
+    depends_on:
+      - db
+    networks:
+      - net
+  db:
+    image: postgres:15.8-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PSWD}
+      - POSTGRES_DB=${DB_DB}
+    ports:
+      - '5436:${DB_PORT}'
+    networks:
+      - net
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+  back:
+    extends:
+      file: ./app/back/docker-compose.yml
+      service: back
+    depends_on:
+      - db
+    networks:
+      - net
+
+volumes:
+  db:
+  venvs:
+
+networks:
+  net:
+    driver: bridge
