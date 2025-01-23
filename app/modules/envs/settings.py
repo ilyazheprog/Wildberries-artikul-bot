@@ -14,6 +14,7 @@ class Backend:
     url: str
     auth_token: str
 
+
 @dataclass
 class Wildberries:
     get_details_url: str
@@ -61,7 +62,9 @@ def get_settings():
         ),
         wildberries=Wildberries(
             get_details_url=env_var.str("WB_GET_DETAILS_URL"),
-            minutes_to_update_subscriptions=env_var.int("WB_MINUTES_TO_UPDATE_SUBSCRIPTIONS"),
+            minutes_to_update_subscriptions=env_var.int(
+                "WB_MINUTES_TO_UPDATE_SUBSCRIPTIONS"
+            ),
         ),
     )
 

@@ -1,0 +1,24 @@
+version: "3.3"
+services:
+  bot:
+    build:
+      context: .
+    working_dir: /home/python_user/app/bot
+    env_file: ../../.env
+    restart: always
+    command: bash -c "pdm config venv.in_project False; pdm config check_update false; pdm i; pdm start"
+    tty: true
+    volumes:
+      - ./:/home/python_user/app/bot
+      - ../modules/:/home/python_user/app/modules
+      - venvs:/home/python_user/.local/share/pdm/venvs
+      - ../../pyproject.toml:/home/python_user/app/pyproject.toml
+      - ../../pdm.lock:/home/python_user/app/pdm.lock
+    networks:
+      - net
+
+volumes:
+  venvs:
+networks:
+  net:
+    driver: bridge

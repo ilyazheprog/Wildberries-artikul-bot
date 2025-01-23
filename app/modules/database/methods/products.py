@@ -1,8 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from ..models import Product
 from back.schemas import ProductCreate
+
+from ..models import Product
+
 
 async def add_product(
     session: AsyncSession,
@@ -15,11 +17,14 @@ async def add_product(
     return product
 
 
-async def get_product_by_artikul(session: AsyncSession, artikul: int) -> Product:
+from typing import Optional
+
+async def get_product_by_artikul(session: AsyncSession, artikul: int) -> Optional[Product]:
     """Get product by artikul"""
     stmt = select(Product).where(Product.artikul == artikul)
     result = await session.execute(stmt)
     return result.scalars().first()
+
 
 async def is_product_exists(session: AsyncSession, artikul: int) -> bool:
     """Check if product exists"""
@@ -52,6 +57,9 @@ async def update_product_by_artikul(
     return product
 
 
-__all__ = ["add_product", "get_product_by_artikul", 
-           "is_product_exists",
-           "update_product_by_artikul"]
+__all__ = [
+    "add_product",
+    "get_product_by_artikul",
+    "is_product_exists",
+    "update_product_by_artikul",
+]
